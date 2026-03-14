@@ -1,5 +1,6 @@
 task = []
 donetask = []
+
 def add():
     while True:
         addtask = input("Enter phrase (or 'done' to stop and back to back to main menu): ")
@@ -31,30 +32,61 @@ def task_progress():
         while True:
             view()
             mark = int(input("Enter the index of the task to mark done to stop enterinalid: "))
-            if 0 < mark < len(task):
+            if 1 <= mark <= len(task):
                 completed = task[mark-1]
-                donetask.append(completed)
+                if completed in donetask:
+                    print("already marked as done")
+                else:
+                    donetask.append(completed)
                 print(f'this is the task so far {completed}')
             elif mark == -1:
                 return
 def save_task():
     with open('task.txt', 'w') as f:
-        f.write("this is my task")
+        f.write("this is my task\n")
         for i,t in enumerate(task):
-            f.write(f'{i+1} : {t}')
+            f.write(f' {t}\n')
+    with open('done.txt', 'w') as f:
+        f.write("this is my done task\n")
+        for i,t in enumerate(donetask):
+            f.write(f' [x]{t}\n')
     print("Task saved")
-
-
-while True:
-    print("1. Add task\n2. View task\n3. Remove task\n4.markdone\n5.save task\n0.Exit")
-    num = int(input("Enter your choice: "))
-    if num == 1:
-        add()
-    elif num == 2:
-        view()
-    elif num == 3:
-        remove()
-    elif num == 4:
-        task_progress()
-    elif num == 5:
-        save_task()
+def load_task():
+    try:
+        with open('task.txt', 'r') as f:
+            for line in f:
+                task.append(line.strip())
+        with open('done.txt', 'r') as f:
+            for line in f:
+                task.append(line.strip())
+    except FileNotFoundError:
+        pass
+def delete_xotext():
+    try:
+        with open('task.txt', 'w') as f:
+            f.write("")
+            print("Task deleted")
+        with open('done.txt', 'w') as f:
+            f.write("")
+    except FileNotFoundError:
+        pass
+def main():
+    load_task()
+    while True:
+        print("Welcome To Task Manager\n1. add\n2. view\n3. remove\n4. task process\n5.Save task\n6.Delete\n0. Exit")
+        menu = {
+            1: add,
+            2: view,
+            3: remove,
+            4: task_progress,
+            5: save_task,
+            6: delete_xotext,
+            0: exit
+        }
+        choice = int(input("Enter your choice: "))
+        if choice in menu:
+            menu[choice]()
+        else:
+            print("Invalid choice")
+if __name__ == "__main__":
+    main()
