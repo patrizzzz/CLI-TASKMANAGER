@@ -58,7 +58,7 @@ def load_task():
                 task.append(line.strip())
         with open('done.txt', 'r') as f:
             for line in f:
-                task.append(line.strip())
+                donetask.append(line.strip())
     except FileNotFoundError:
         pass
 def delete_xotext():
