@@ -70,10 +70,29 @@ def delete_xotext():
             f.write("")
     except FileNotFoundError:
         pass
+def edit():
+    if not task:
+        print("No task to edit")
+        return
+    while True:
+        view()
+        try:
+            idx = int(input("Enter the index of the task to edit (or 0 to cancel): "))
+            if idx == 0:
+                break
+            if 1 <= idx <= len(task):
+                new_desc = input("Enter new task description: ")
+                task[idx-1] = new_desc
+                print(f"Task {idx} updated successfully!")
+                break
+            else:
+                print("Invalid index")
+        except ValueError:
+            print("Invalid input, please enter a number")
 def main():
     load_task()
     while True:
-        print("Welcome To Task Manager\n1. add\n2. view\n3. remove\n4. task process\n5.Save task\n6.Delete\n0. Exit")
+        print("Welcome To Task Manager\n1. add\n2. view\n3. remove\n4. task process\n5.Save task\n6.Delete\n7.Edit Task\n0. Exit")
         menu = {
             1: add,
             2: view,
@@ -81,6 +100,7 @@ def main():
             4: task_progress,
             5: save_task,
             6: delete_xotext,
+            7: edit,
             0: exit
         }
         choice = int(input("Enter your choice: "))
